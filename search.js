@@ -120,11 +120,14 @@ class FC2VideoSearcher {
             
             // 改行区切りでIDを分割し、数値に変換
             searchIds = bulkInput
-                .split('\\n')
+                .split(/\r?\n/)
                 .map(id => id.trim())
                 .filter(id => id !== '')
                 .map(id => parseInt(id))
                 .filter(id => !isNaN(id));
+                
+            console.log('Bulk search input:', bulkInput);
+            console.log('Split result:', searchIds);
                 
             if (searchIds.length === 0) {
                 this.showError('有効なIDが見つかりません。');
