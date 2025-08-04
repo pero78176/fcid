@@ -247,6 +247,7 @@ class FC2VideoSearcher {
         // 個別サイトボタンを作成
         externalSites.forEach(site => {
             const checkbox = document.getElementById(site.id);
+            console.log(`Checking site: ${site.id}, checkbox found: ${!!checkbox}, checked: ${checkbox ? checkbox.checked : 'N/A'}`);
             if (checkbox && checkbox.checked) {
                 const btn = document.createElement('a');
                 btn.href = site.url;
