@@ -206,28 +206,78 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-lg-4 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="site-fc2ppvdb" checked>
                                     <label class="form-check-label" for="site-fc2ppvdb">
-                                        FC2PPVDB.com
+                                        <span class="badge bg-primary me-1">DB</span>FC2PPVDB
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-lg-4 mb-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="site-example" disabled>
-                                    <label class="form-check-label" for="site-example">
-                                        その他のサイト（将来実装予定）
+                                    <input class="form-check-input" type="checkbox" id="site-javmix" checked>
+                                    <label class="form-check-label" for="site-javmix">
+                                        <span class="badge bg-success me-1">MIX</span>JavMix
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="site-spankbang" checked>
+                                    <label class="form-check-label" for="site-spankbang">
+                                        <span class="badge bg-info me-1">SB</span>SpankBang
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="site-tktube" checked>
+                                    <label class="form-check-label" for="site-tktube">
+                                        <span class="badge bg-secondary me-1">TK</span>TKTube
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="site-7mmtv">
+                                    <label class="form-check-label" for="site-7mmtv">
+                                        <span class="badge bg-dark me-1">7M</span>7MMTV
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="site-tokyomotion">
+                                    <label class="form-check-label" for="site-tokyomotion">
+                                        <span class="badge bg-warning me-1">TM</span>TokyoMotion
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="site-supjav">
+                                    <label class="form-check-label" for="site-supjav">
+                                        <span class="badge bg-danger me-1">SJ</span>SupJav
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-3">
-                            <small class="text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                未所持の動画IDが見つかった場合、選択したサイトで検索できます
-                            </small>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    未所持の動画IDが見つかった場合、選択したサイトで検索できます
+                                </small>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-success me-1" onclick="document.querySelectorAll('.form-check-input').forEach(cb => cb.checked = true)">
+                                        <i class="fas fa-check-square me-1"></i>全選択
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="document.querySelectorAll('.form-check-input').forEach(cb => cb.checked = false)">
+                                        <i class="fas fa-square me-1"></i>全解除
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -233,20 +233,34 @@ class FC2VideoSearcher {
         const container = document.createElement('div');
         container.className = 'external-links';
 
-        // FC2PPVDB リンク
-        if (document.getElementById('site-fc2ppvdb').checked) {
-            const fc2ppvdbBtn = document.createElement('a');
-            fc2ppvdbBtn.href = `https://fc2ppvdb.com/articles/${videoId}`;
-            fc2ppvdbBtn.target = '_blank';
-            fc2ppvdbBtn.className = 'btn btn-sm btn-outline-primary';
-            fc2ppvdbBtn.innerHTML = '<i class="fas fa-external-link-alt me-1"></i>FC2PPVDB';
-            container.appendChild(fc2ppvdbBtn);
-        }
+        // 外部サイト設定
+        const externalSites = [
+            { id: 'site-fc2ppvdb', name: 'FC2PPVDB', url: `https://fc2ppvdb.com/search?stype=title&keyword=${videoId}`, color: 'primary' },
+            { id: 'site-javmix', name: 'JavMix', url: `https://javmix.tv/?s=${videoId}`, color: 'success' },
+            { id: 'site-spankbang', name: 'SpankBang', url: `https://jp.spankbang.com/s/fc2%20ppv%20${videoId}/`, color: 'info' },
+            { id: 'site-tktube', name: 'TKTube', url: `https://tktube.com/ja/search/${videoId}/`, color: 'secondary' },
+            { id: 'site-7mmtv', name: '7MMTV', url: `https://7mmtv.sx/ja/searchall_search/all/${videoId}/1.html`, color: 'dark' },
+            { id: 'site-tokyomotion', name: 'TokyoMotion', url: `https://www.tokyomotion.net/search?search_query=${videoId}&search_type=videos`, color: 'warning' },
+            { id: 'site-supjav', name: 'SupJav', url: `https://supjav.com/ja/?s=${videoId}`, color: 'danger' }
+        ];
+
+        // 個別サイトボタンを作成
+        externalSites.forEach(site => {
+            const checkbox = document.getElementById(site.id);
+            if (checkbox && checkbox.checked) {
+                const btn = document.createElement('a');
+                btn.href = site.url;
+                btn.target = '_blank';
+                btn.className = `btn btn-sm btn-outline-${site.color} me-1 mb-1`;
+                btn.innerHTML = `<i class="fas fa-external-link-alt me-1"></i>${site.name}`;
+                container.appendChild(btn);
+            }
+        });
 
         // 一括外部サイトオープンボタン
         const openAllBtn = document.createElement('button');
-        openAllBtn.className = 'btn btn-sm btn-warning';
-        openAllBtn.innerHTML = '<i class="fas fa-external-link-alt me-1"></i>一括検索';
+        openAllBtn.className = 'btn btn-sm btn-warning mb-1';
+        openAllBtn.innerHTML = '<i class="fas fa-rocket me-1"></i>一括検索';
         openAllBtn.onclick = () => this.openAllExternalSites(videoId);
         container.appendChild(openAllBtn);
 
@@ -257,23 +271,32 @@ class FC2VideoSearcher {
      * 全ての外部サイトを一括で開く
      */
     openAllExternalSites(videoId) {
-        const sites = [];
+        const externalSites = [
+            { id: 'site-fc2ppvdb', url: `https://fc2ppvdb.com/search?stype=title&keyword=${videoId}` },
+            { id: 'site-javmix', url: `https://javmix.tv/?s=${videoId}` },
+            { id: 'site-spankbang', url: `https://jp.spankbang.com/s/fc2%20ppv%20${videoId}/` },
+            { id: 'site-tktube', url: `https://tktube.com/ja/search/${videoId}/` },
+            { id: 'site-7mmtv', url: `https://7mmtv.sx/ja/searchall_search/all/${videoId}/1.html` },
+            { id: 'site-tokyomotion', url: `https://www.tokyomotion.net/search?search_query=${videoId}&search_type=videos` },
+            { id: 'site-supjav', url: `https://supjav.com/ja/?s=${videoId}` }
+        ];
 
-        if (document.getElementById('site-fc2ppvdb').checked) {
-            sites.push(`https://fc2ppvdb.com/articles/${videoId}`);
-        }
+        const selectedSites = [];
+        externalSites.forEach(site => {
+            const checkbox = document.getElementById(site.id);
+            if (checkbox && checkbox.checked) {
+                selectedSites.push(site.url);
+            }
+        });
 
-        // 将来的に他のサイトも追加可能
-        // sites.push(`https://example.com/search?q=${videoId}`);
-
-        if (sites.length === 0) {
+        if (selectedSites.length === 0) {
             this.showError('外部サイトが選択されていません。');
             return;
         }
 
         // 確認ダイアログ
-        if (confirm(`${sites.length}個のサイトを新しいタブで開きますか？`)) {
-            sites.forEach(url => {
+        if (confirm(`${selectedSites.length}個のサイトを新しいタブで開きますか？`)) {
+            selectedSites.forEach(url => {
                 window.open(url, '_blank');
             });
         }
