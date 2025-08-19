@@ -157,25 +157,10 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="search-mode" class="form-label">
-                                <i class="fas fa-cog me-1"></i>検索モード
+                            <label for="bulk-ids" class="form-label">
+                                <i class="fas fa-keyboard me-1"></i>動画ID（1つまたは複数）
                             </label>
-                            <select class="form-select" id="search-mode">
-                                <option value="single">単一ID検索</option>
-                                <option value="bulk">一括検索（改行区切り）</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="search-input" class="form-label">
-                                <i class="fas fa-keyboard me-1"></i>動画ID
-                            </label>
-                            <div id="single-search">
-                                <input type="number" class="form-control" id="single-id" placeholder="例: 1234567">
-                            </div>
-                            <div id="bulk-search" style="display:none;">
-                                <textarea class="form-control" id="bulk-ids" rows="5" placeholder="複数のIDを改行で区切って入力&#10;例:&#10;1234567&#10;2345678&#10;3456789"></textarea>
-                            </div>
+                            <textarea class="form-control" id="bulk-ids" rows="5" placeholder="1つまたは複数のIDを改行で区切って入力&#10;例:&#10;1234567&#10;2345678&#10;3456789"></textarea>
                         </div>
 
                         <div class="d-grid">

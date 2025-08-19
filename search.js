@@ -19,28 +19,15 @@ class FC2VideoSearcher {
      * イベントリスナーの初期化
      */
     initializeEventListeners() {
-        const searchModeSelect = document.getElementById('search-mode');
         const searchBtn = document.getElementById('search-btn');
-        const singleId = document.getElementById('single-id');
         const bulkIds = document.getElementById('bulk-ids');
-
-        // 検索モード切り替え
-        searchModeSelect.addEventListener('change', () => {
-            this.toggleSearchMode();
-        });
 
         // 検索ボタンクリック
         searchBtn.addEventListener('click', () => {
             this.performSearch();
         });
 
-        // Enterキーでの検索実行
-        singleId.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.performSearch();
-            }
-        });
-
+        // Ctrl+Enterキーでの検索実行
         bulkIds.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && e.ctrlKey) {
                 this.performSearch();
@@ -48,22 +35,6 @@ class FC2VideoSearcher {
         });
     }
 
-    /**
-     * 検索モードの切り替え
-     */
-    toggleSearchMode() {
-        const mode = document.getElementById('search-mode').value;
-        const singleSearch = document.getElementById('single-search');
-        const bulkSearch = document.getElementById('bulk-search');
-
-        if (mode === 'single') {
-            singleSearch.style.display = 'block';
-            bulkSearch.style.display = 'none';
-        } else {
-            singleSearch.style.display = 'none';
-            bulkSearch.style.display = 'block';
-        }
-    }
 
     /**
      * 外部APIから動画データを読み込み
@@ -101,38 +72,26 @@ class FC2VideoSearcher {
      * 検索実行
      */
     performSearch() {
-        const mode = document.getElementById('search-mode').value;
-        let searchIds = [];
-
-        if (mode === 'single') {
-            const singleId = document.getElementById('single-id').value.trim();
-            if (!singleId) {
-                this.showError('IDを入力してください。');
-                return;
-            }
-            searchIds = [parseInt(singleId)];
-        } else {
-            const bulkInput = document.getElementById('bulk-ids').value.trim();
-            if (!bulkInput) {
-                this.showError('IDを入力してください。');
-                return;
-            }
+        const bulkInput = document.getElementById('bulk-ids').value.trim();
+        if (!bulkInput) {
+            this.showError('IDを入力してください。');
+            return;
+        }
+        
+        // 改行区切りでIDを分割し、数値に変換
+        const searchIds = bulkInput
+            .split(/\r?\n/)
+            .map(id => id.trim())
+            .filter(id => id !== '')
+            .map(id => parseInt(id))
+            .filter(id => !isNaN(id));
             
-            // 改行区切りでIDを分割し、数値に変換
-            searchIds = bulkInput
-                .split(/\r?\n/)
-                .map(id => id.trim())
-                .filter(id => id !== '')
-                .map(id => parseInt(id))
-                .filter(id => !isNaN(id));
-                
-            console.log('Bulk search input:', bulkInput);
-            console.log('Split result:', searchIds);
-                
-            if (searchIds.length === 0) {
-                this.showError('有効なIDが見つかりません。');
-                return;
-            }
+        console.log('Search input:', bulkInput);
+        console.log('Split result:', searchIds);
+            
+        if (searchIds.length === 0) {
+            this.showError('有効なIDが見つかりません。');
+            return;
         }
 
         // 検索実行
@@ -220,13 +179,35 @@ class FC2VideoSearcher {
 
         item.appendChild(leftContent);
 
-        // 未所持の場合は外部リンクを追加
+        // 所持・未所持どちらの場合もリンクを追加
         if (!result.found) {
+            // 未所持の場合は全ての外部リンクを表示
             const linksContainer = this.createExternalLinks(result.id);
             item.appendChild(linksContainer);
+        } else {
+            // 所持している場合はFC2PPVDBリンクのみ表示
+            const fc2ppvdbLink = this.createFC2PPVDBLink(result.id);
+            item.appendChild(fc2ppvdbLink);
         }
 
         return item;
+    }
+
+    /**
+     * 所持している動画用のFC2PPVDBリンクの作成
+     */
+    createFC2PPVDBLink(videoId) {
+        const container = document.createElement('div');
+        container.className = 'external-links';
+
+        const btn = document.createElement('a');
+        btn.href = `https://fc2ppvdb.com/search?stype=title&keyword=${videoId}`;
+        btn.target = '_blank';
+        btn.className = 'btn btn-sm btn-outline-primary me-1 mb-1';
+        btn.innerHTML = '<i class="fas fa-external-link-alt me-1"></i>FC2PPVDB';
+        container.appendChild(btn);
+
+        return container;
     }
 
     /**
