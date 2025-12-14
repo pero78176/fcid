@@ -10,7 +10,7 @@ class FC2VideoSearcher {
         this.foundCount = 0;
         this.notFoundCount = 0;
         this.lastUpdated = '';
-        
+
         this.initializeEventListeners();
         this.loadVideoData();
     }
@@ -42,24 +42,24 @@ class FC2VideoSearcher {
     async loadVideoData() {
         try {
             this.showLoading(true);
-            
+
             const response = await fetch('id_list.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const data = await response.json();
-            
+
             // データを Set に格納（高速検索のため）
             this.videoIds = new Set(data.ids);
             this.totalCount = data.total_count;
             this.lastUpdated = new Date(data.generated_at).toLocaleString('ja-JP');
-            
+
             // 統計情報を更新
             this.updateStats();
-            
+
             console.log(`✅ 動画データ読み込み完了: ${this.totalCount}件`);
-            
+
         } catch (error) {
             console.error('❌ データ読み込みエラー:', error);
             this.showError('データの読み込みに失敗しました。ページを再読み込みしてください。');
@@ -77,7 +77,7 @@ class FC2VideoSearcher {
             this.showError('IDを入力してください。');
             return;
         }
-        
+
         // 改行区切りでIDを分割し、数値に変換
         const searchIds = bulkInput
             .split(/\r?\n/)
@@ -85,10 +85,10 @@ class FC2VideoSearcher {
             .filter(id => id !== '')
             .map(id => parseInt(id))
             .filter(id => !isNaN(id));
-            
+
         console.log('Search input:', bulkInput);
         console.log('Split result:', searchIds);
-            
+
         if (searchIds.length === 0) {
             this.showError('有効なIDが見つかりません。');
             return;
@@ -138,7 +138,7 @@ class FC2VideoSearcher {
 
         const resultCard = document.createElement('div');
         resultCard.className = 'card result-card fade-in';
-        
+
         const cardBody = document.createElement('div');
         cardBody.className = 'card-body';
 
@@ -165,15 +165,15 @@ class FC2VideoSearcher {
     createResultItem(result) {
         const item = document.createElement('div');
         item.className = `alert ${result.found ? 'alert-success' : 'alert-danger'} d-flex justify-content-between align-items-center mb-2`;
-        
+
         const leftContent = document.createElement('div');
         leftContent.innerHTML = `
             <strong>ID: ${result.id}</strong>
             <span class="ms-2">
-                ${result.found ? 
-                    '<i class="fas fa-check-circle me-1"></i>所持しています' : 
-                    '<i class="fas fa-times-circle me-1"></i>所持していません'
-                }
+                ${result.found ?
+                '<i class="fas fa-check-circle me-1"></i>所持しています' :
+                '<i class="fas fa-times-circle me-1"></i>所持していません'
+            }
             </span>
         `;
 
@@ -225,7 +225,9 @@ class FC2VideoSearcher {
             { id: 'site-tktube', name: 'TKTube', url: `https://tktube.com/ja/search/${videoId}/`, color: 'secondary' },
             { id: 'site-7mmtv', name: '7MMTV', url: `https://7mmtv.sx/ja/searchall_search/all/${videoId}/1.html`, color: 'dark' },
             { id: 'site-tokyomotion', name: 'TokyoMotion', url: `https://www.tokyomotion.net/search?search_query=${videoId}&search_type=videos`, color: 'warning' },
-            { id: 'site-supjav', name: 'SupJav', url: `https://supjav.com/ja/?s=${videoId}`, color: 'danger' }
+            { id: 'site-supjav', name: 'SupJav', url: `https://supjav.com/ja/?s=${videoId}`, color: 'danger' },
+            { id: 'site-missav', name: 'MISSAV', url: `https://missav.ai/ja/search/${videoId}`, color: 'success' },
+            { id: 'site-google', name: 'Google', url: `https://www.google.com/search?q=rapidgator+${videoId}`, color: 'primary' }
         ];
 
         // 個別サイトボタンを作成
@@ -263,7 +265,9 @@ class FC2VideoSearcher {
             { id: 'site-tktube', url: `https://tktube.com/ja/search/${videoId}/` },
             { id: 'site-7mmtv', url: `https://7mmtv.sx/ja/searchall_search/all/${videoId}/1.html` },
             { id: 'site-tokyomotion', url: `https://www.tokyomotion.net/search?search_query=${videoId}&search_type=videos` },
-            { id: 'site-supjav', url: `https://supjav.com/ja/?s=${videoId}` }
+            { id: 'site-supjav', url: `https://supjav.com/ja/?s=${videoId}` },
+            { id: 'site-missav', url: `https://missav.ai/ja/search/${videoId}` },
+            { id: 'site-google', url: `https://www.google.com/search?q=rapidgator+${videoId}` }
         ];
 
         const selectedSites = [];
@@ -303,7 +307,7 @@ class FC2VideoSearcher {
     showLoading(show) {
         const loading = document.querySelector('.loading');
         const searchBtn = document.getElementById('search-btn');
-        
+
         if (show) {
             loading.style.display = 'block';
             searchBtn.disabled = true;
